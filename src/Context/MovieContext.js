@@ -18,8 +18,9 @@ const MovieContextProvider = ({children}) => {
       formatType: 'comic',
       startYear: '2000',
       orderBy: 'title',
-      limit: 20,
+      // limit: 20,
     },
+    titleStartsWith: '',
   });
   const [isSearch, setIsSearch] = useState(false);
 
@@ -29,8 +30,15 @@ const MovieContextProvider = ({children}) => {
       isLoading: true,
     }));
     axios
-      .get(`${url}?${queryString.stringify(movie.parameters)}`)
+      .get(
+        `${url}?${queryString.stringify(
+          movie.titleStartsWith === ''
+            ? movie.parameters
+            : {...movie.parameters, titleStartsWith: movie.titleStartsWith},
+        )}`,
+      )
       .then(response => {
+        // console.log(response.data.data.results);
         const data = [];
         data.push(response.data.data.results);
 
@@ -47,6 +55,7 @@ const MovieContextProvider = ({children}) => {
         console.log(err);
       });
   };
+  // console.log({...movie.parameters, titleStartsWith: movie.titleStartsWith});
 
   return (
     <MovieContext.Provider

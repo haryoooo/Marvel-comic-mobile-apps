@@ -1,16 +1,37 @@
-import React, {useContext} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {View, StyleSheet, Image, Pressable} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 import {MovieContext} from '../Context/MovieContext';
 
 export default function NavbarComponent() {
   const movieContext = useContext(MovieContext);
+  const pickerRef = useRef();
+  const [selectedLanguage, setSelectedLanguage] = useState();
+
+  function open() {
+    pickerRef.current.focus();
+  }
+
+  function close() {
+    pickerRef.current.blur();
+  }
 
   return (
     <View style={styles.navbarContainer}>
-      <Image
-        style={styles.iconMenu}
-        source={require('../Assets/burger_menu.png')}
-      />
+      <View style={styles.pickerContainer}>
+        <Picker
+          dropdownIconColor={'white'}
+          style={styles.picker}
+          ref={pickerRef}
+          selectedValue={selectedLanguage}
+          onValueChange={(itemValue, itemIndex) =>
+            setSelectedLanguage(itemValue)
+          }>
+          <Picker.Item label="Order" value="default" />
+          <Picker.Item label="Latest" value="modified" />
+          <Picker.Item label="Issue Number" value="issueNumber" />
+        </Picker>
+      </View>
       <View style={styles.text}>
         <Image
           style={{
@@ -41,6 +62,24 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderStyle: 'solid',
     height: 80,
+  },
+
+  pickerContainer: {
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: 'white',
+    width: 105,
+    marginRight: -90,
+    marginLeft: 8,
+    marginVertical: 20,
+  },
+
+  picker: {
+    width: 125,
+    top: -10,
+    marginLeft: -10,
+    backgroundColor: 'transparent',
+    color: 'white',
   },
 
   text: {

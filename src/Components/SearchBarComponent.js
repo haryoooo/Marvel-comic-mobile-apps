@@ -10,9 +10,8 @@ export default function SearchBarComponent() {
   const updateSearch = search => {
     movieContext.setMovie(prev => ({
       ...prev,
-      title: search,
+      titleStartsWith: search,
     }));
-    console.log(search);
     setValue(search);
   };
 

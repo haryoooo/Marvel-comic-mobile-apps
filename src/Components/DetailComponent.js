@@ -1,9 +1,11 @@
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import queryString from 'query-string';
-import {View, Text, StyleSheet, Modal} from 'react-native';
+import {View, Text, StyleSheet, Modal, Image, ScrollView} from 'react-native';
 import {API_KEY, hash} from '../Helpers/apiConfig';
 import {url} from '../Helpers/urlConfig';
+import LoadingComponent from './LoadingComponent';
+import {color} from 'react-native-elements/dist/helpers';
 
 export default function DetailComponent({comicId, display, setDisplay}) {
   const [detailMovie, setDetailMovie] = useState({
@@ -43,22 +45,39 @@ export default function DetailComponent({comicId, display, setDisplay}) {
   }, [comicId, display]);
 
   return (
-    <View>
+    <ScrollView>
       <Modal
         animationType="slide"
         transparent={true}
         visible={display}
         onRequestClose={setDisplay}>
-        {detailMovie?.items?.map((value, i) => {
-          return (
-            <View style={styles.modalView} key={i}>
-              <Text style={styles.modalText}>{value?.title}</Text>
-              <Text style={styles.modalText}>
-                {value?.description !== null
-                  ? value.description
-                  : 'No Description'}
-              </Text>
-              {/* {value.creators.items.map(value => {
+        {detailMovie.isLoading === true ? (
+          <View style={styles.modalView}>
+            <LoadingComponent />
+          </View>
+        ) : (
+          detailMovie?.items?.map((value, i) => {
+            return (
+              <View style={styles.modalView} key={i}>
+                <Text style={styles.modalHeaderText}>{value?.title}</Text>
+                {value.images.map((val, i) => {
+                  return (
+                    <View key={i}>
+                      <Image
+                        style={styles.images}
+                        source={{uri: `${val.path}.${val.extension}`}}
+                      />
+                    </View>
+                  );
+                })}
+                <View style={styles.modalText}>
+                  <Text>
+                    {value.description !== '' && value.description !== null
+                      ? value.description
+                      : 'No Description'}
+                  </Text>
+                </View>
+                {/* {value.creators.items.map(value => {
                 return (
                   <>
                     <Text>{value.name}</Text>
@@ -73,18 +92,19 @@ export default function DetailComponent({comicId, display, setDisplay}) {
                   </>
                 );
               })} */}
-            </View>
-          );
-        })}
+              </View>
+            );
+          })
+        )}
       </Modal>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   modalView: {
     marginHorizontal: 15,
-    marginTop: '60%',
+    marginTop: '30%',
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
@@ -98,11 +118,26 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+
+  modalHeaderText: {
+    fontFamily: 'poppins',
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: 'black',
+  },
+
   modalText: {
     textAlign: 'justify',
     fontFamily: 'poppins',
     fontWeight: 'bold',
     marginBottom: 15,
     textAlign: 'center',
+  },
+
+  images: {
+    width: 170,
+    height: 250,
+    marginHorizontal: 10,
+    marginVertical: 20,
   },
 });

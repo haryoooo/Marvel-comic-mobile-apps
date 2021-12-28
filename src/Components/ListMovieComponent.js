@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {View, Text, Image, StyleSheet, Pressable} from 'react-native';
 import {MovieContext} from '../Context/MovieContext';
 import DetailComponent from './DetailComponent';
-// import SkeletonContent from 'react-native-skeleton-content';
+import SkeletonComponent from './SkeletonComponent';
 
 export default function ListMovieComponent() {
   const movieContext = useContext(MovieContext);
@@ -13,22 +13,15 @@ export default function ListMovieComponent() {
 
   useEffect(() => {
     movieContext.fetchMovie();
-  }, []);
+  }, [movieContext.movie.titleStartsWith]);
 
-  // if(movieContext.movie.isLoading === true){
-  //   return (
-  //     <>
-  //     <SkeletonContent
-  //     containerStyle={{ flex: 1, width: 300 }}
-  //     isLoading={false}
-  //     layout={[
-  //       { key: 'someId', width: 220, height: 20, marginBottom: 6 },
-  //       { key: 'someOtherId', width: 180, height: 20, marginBottom: 6 }
-  //     ]}
-  //   ></SkeletonContent>
-  //     </>
-  //   )
-  // }
+  if (movieContext.movie.isLoading === true) {
+    return (
+      <View>
+        <SkeletonComponent />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
