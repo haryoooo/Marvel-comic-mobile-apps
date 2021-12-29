@@ -17,9 +17,9 @@ const MovieContextProvider = ({children}) => {
       format: 'comic',
       formatType: 'comic',
       startYear: '2000',
-      orderBy: 'title',
       // limit: 20,
     },
+    orderBy: 'title',
     titleStartsWith: '',
   });
   const [isSearch, setIsSearch] = useState(false);
@@ -33,8 +33,12 @@ const MovieContextProvider = ({children}) => {
       .get(
         `${url}?${queryString.stringify(
           movie.titleStartsWith === ''
-            ? movie.parameters
-            : {...movie.parameters, titleStartsWith: movie.titleStartsWith},
+            ? {...movie.parameters, orderBy: movie.orderBy}
+            : {
+                ...movie.parameters,
+                orderBy: movie.orderBy,
+                titleStartsWith: movie.titleStartsWith,
+              },
         )}`,
       )
       .then(response => {

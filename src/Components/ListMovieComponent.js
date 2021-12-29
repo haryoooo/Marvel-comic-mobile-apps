@@ -13,7 +13,7 @@ export default function ListMovieComponent() {
 
   useEffect(() => {
     movieContext.fetchMovie();
-  }, [movieContext.movie.titleStartsWith]);
+  }, [movieContext.movie.titleStartsWith, movieContext.movie.orderBy]);
 
   if (movieContext.movie.isLoading === true) {
     return (

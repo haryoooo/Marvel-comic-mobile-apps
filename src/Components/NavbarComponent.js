@@ -6,7 +6,6 @@ import {MovieContext} from '../Context/MovieContext';
 export default function NavbarComponent() {
   const movieContext = useContext(MovieContext);
   const pickerRef = useRef();
-  const [selectedLanguage, setSelectedLanguage] = useState();
 
   function open() {
     pickerRef.current.focus();
@@ -23,11 +22,11 @@ export default function NavbarComponent() {
           dropdownIconColor={'white'}
           style={styles.picker}
           ref={pickerRef}
-          selectedValue={selectedLanguage}
+          selectedValue={movieContext.movie.orderBy}
           onValueChange={(itemValue, itemIndex) =>
-            setSelectedLanguage(itemValue)
+            movieContext.setMovie(prev => ({...prev, orderBy: itemValue}))
           }>
-          <Picker.Item label="Order" value="default" />
+          <Picker.Item label="Order" value="title" />
           <Picker.Item label="Latest" value="modified" />
           <Picker.Item label="Issue Number" value="issueNumber" />
         </Picker>

@@ -1,11 +1,19 @@
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import queryString from 'query-string';
-import {View, Text, StyleSheet, Modal, Image, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Modal,
+  Image,
+  ScrollView,
+  Pressable,
+} from 'react-native';
 import {API_KEY, hash} from '../Helpers/apiConfig';
 import {url} from '../Helpers/urlConfig';
 import LoadingComponent from './LoadingComponent';
-import {color} from 'react-native-elements/dist/helpers';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function DetailComponent({comicId, display, setDisplay}) {
   const [detailMovie, setDetailMovie] = useState({
@@ -59,6 +67,11 @@ export default function DetailComponent({comicId, display, setDisplay}) {
           detailMovie?.items?.map((value, i) => {
             return (
               <View style={styles.modalView} key={i}>
+                <Pressable
+                  style={styles.modalIcon}
+                  onPress={() => setDisplay(false)}>
+                  <Icon name="close-circle-outline" size={35} />
+                </Pressable>
                 <Text style={styles.modalHeaderText}>{value?.title}</Text>
                 {value.images.map((val, i) => {
                   return (
@@ -117,6 +130,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+
+  modalIcon: {
+    alignSelf: 'flex-end',
+    marginBottom: 10,
   },
 
   modalHeaderText: {
